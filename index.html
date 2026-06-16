@@ -4,33 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Direktori Chikal 2026</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glow-card:hover { box-shadow: 0 0 15px rgba(34, 211, 238, 0.3); }
+    </style>
 </head>
-<body class="bg-black text-white p-6 font-sans">
-    <h1 class="text-4xl font-bold text-center mb-12 text-cyan-400 tracking-tight">Direktori Anggota</h1>
+<body class="bg-black text-white min-h-screen p-6 font-sans">
     
-    <div id="app" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-        <p class="text-center col-span-full animate-pulse">Memuat data anggota...</p>
-    </div>
+    <header class="max-w-5xl mx-auto mb-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-cyan-400 tracking-tight mb-4">Direktori Anggota Chikal 2026</h1>
+        <p class="text-gray-500">Data resmi organisasi</p>
+    </header>
+
+    <!-- Container Grid -->
+    <main id="app" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <!-- Konten akan dimuat oleh JavaScript -->
+        <p class="text-center col-span-full animate-pulse text-cyan-400">Memuat data anggota...</p>
+    </main>
 
     <script>
-        fetch('https://script.google.com/macros/s/AKfycbzwCibasAHrlxpim5GfZFef2Awl16tkarBOEUTmbE_HVKRNWTg_fVvlP1v5uSD9XDUF/exec')
+        // Link Google Apps Script Anda
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwCibasAHrlxpim5GfZFef2Awl16tkarBOEUTmbE_HVKRNWTg_fVvlP1v5uSD9XDUF/exec';
+
+        fetch(SCRIPT_URL)
             .then(res => res.json())
             .then(data => {
                 const app = document.getElementById('app');
                 app.innerHTML = data.map(m => `
-                    <div class="p-6 border border-gray-800 rounded-3xl bg-gray-900/50 backdrop-blur hover:border-cyan-500/50 transition-all group">
-                        <h2 class="text-2xl font-bold mb-1">${m.Nama}</h2>
+                    <div class="glow-card p-6 border border-gray-800 rounded-3xl bg-gray-900/50 backdrop-blur transition-all flex flex-col items-center text-center">
+                        <!-- Foto Profil -->
+                        <img src="${m.FotoUrl || 'https://via.placeholder.com/150'}" 
+                             alt="${m.Nama}" 
+                             class="w-24 h-24 rounded-full object-cover border-4 border-gray-800 mb-4 shadow-lg"
+                             onerror="this.src='https://via.placeholder.com/150'">
+                        
+                        <!-- Informasi -->
+                        <h2 class="text-xl font-bold">${m.Nama}</h2>
                         <p class="text-cyan-400 font-medium mb-4">${m.Jabatan}</p>
-                        <div class="space-y-2 text-sm text-gray-400">
-                            <p><span class="text-gray-600">Email:</span> ${m.Email}</p>
-                            <p><span class="text-gray-600">WA:</span> ${m.WhatsApp}</p>
-                            <p class="pt-2 text-xs text-gray-500 italic">Bergabung: ${m.Keterangan}</p>
+                        
+                        <div class="w-full border-t border-gray-800 pt-4 mt-2 text-sm text-gray-400 space-y-1">
+                            <p>Email: <span class="text-white">${m.Email}</span></p>
+                            <p>WA: <span class="text-white">${m.WhatsApp}</span></p>
+                            <p class="text-xs text-gray-600 mt-2 italic">${m.Keterangan || ''}</p>
                         </div>
                     </div>
                 `).join('');
             })
-            .catch(() => document.getElementById('app').innerHTML = "<p class='text-center col-span-full'>Gagal memuat data.</p>");
+            .catch(() => {
+                document.getElementById('app').innerHTML = 
+                    "<p class='text-center col-span-full text-red-500'>Gagal memuat data. Periksa koneksi atau izin Google Script Anda.</p>";
+            });
     </script>
 </body>
 </html>
