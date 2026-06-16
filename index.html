@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Direktori Anggota</title>
+    <title>Direktori Chikal 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-black text-white p-6">
-    <h1 class="text-3xl font-bold text-center mb-10 text-cyan-400">Direktori Anggota</h1>
-    <div id="app" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <p class="text-center col-span-3">Memuat data...</p>
+<body class="bg-black text-white p-6 font-sans">
+    <h1 class="text-4xl font-bold text-center mb-12 text-cyan-400 tracking-tight">Direktori Anggota</h1>
+    
+    <div id="app" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <p class="text-center col-span-full animate-pulse">Memuat data anggota...</p>
     </div>
 
     <script>
@@ -18,13 +19,18 @@
             .then(data => {
                 const app = document.getElementById('app');
                 app.innerHTML = data.map(m => `
-                    <div class="p-6 border border-gray-800 rounded-2xl bg-gray-900 hover:border-cyan-500 transition-all">
-                        <h2 class="text-xl font-bold">${m.Nama}</h2>
-                        <p class="text-cyan-400">${m.Jabatan}</p>
+                    <div class="p-6 border border-gray-800 rounded-3xl bg-gray-900/50 backdrop-blur hover:border-cyan-500/50 transition-all group">
+                        <h2 class="text-2xl font-bold mb-1">${m.Nama}</h2>
+                        <p class="text-cyan-400 font-medium mb-4">${m.Jabatan}</p>
+                        <div class="space-y-2 text-sm text-gray-400">
+                            <p><span class="text-gray-600">Email:</span> ${m.Email}</p>
+                            <p><span class="text-gray-600">WA:</span> ${m.WhatsApp}</p>
+                            <p class="pt-2 text-xs text-gray-500 italic">Bergabung: ${m.Keterangan}</p>
+                        </div>
                     </div>
                 `).join('');
             })
-            .catch(() => document.getElementById('app').innerHTML = "Gagal memuat data.");
+            .catch(() => document.getElementById('app').innerHTML = "<p class='text-center col-span-full'>Gagal memuat data.</p>");
     </script>
 </body>
 </html>
